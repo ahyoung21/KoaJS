@@ -6,7 +6,9 @@ const Router = require('koa-router');
 const app = new Koa();
 const router = new Router();
 const api = require('./api');
+
 const mongoose = require('mongoose');
+const bodyParser = require('koa-bodyparser');
 
 mongoose.Promise = global.Promise; // Node 의 네이티브 Promise 사용
 // mongodb 연결
@@ -20,6 +22,8 @@ mongoose
   });
 
 const port = process.env.PORT || 4000;
+
+app.use(bodyParser()); // 바디파서 적용, 라우터 적용코드보다 상단에 있어야합니다.
 
 router.use('/api', api.routes()); // api 라우트를 /api 경로 하위 라우트로 설정
 
