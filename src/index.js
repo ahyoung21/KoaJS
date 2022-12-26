@@ -12,6 +12,7 @@ const bodyParser = require('koa-bodyparser');
 
 mongoose.Promise = global.Promise; // Node 의 네이티브 Promise 사용
 // mongodb 연결
+mongoose.set('strictQuery', true);
 mongoose
   .connect(process.env.MONGO_URI)
   .then((response) => {

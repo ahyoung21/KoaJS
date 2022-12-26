@@ -4,13 +4,25 @@ const Account = require('models/Account');
 // 로컬 회원가입
 exports.localRegister = async (ctx) => {
   // 데이터 검증
-  const schema = Joi.object().keys({
-    username: Joi.string().alphanum().min(4).max(15).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().required().min(6),
+  // const schema = Joi.object().keys({
+  //   username: Joi.string().alphanum().min(4).max(15).required(),
+  //   email: Joi.string().email().required(),
+  //   password: Joi.string().required().min(6),
+  // });
+
+  const schema = Joi.object({
+    name: Joi.string().min(6).required(),
+    email: Joi.string().min(6).required().email(),
+    password: Joi.string().min(6).required(),
   });
 
-  const result = Joi.validate(ctx.request.body, schema);
+  // const validation = schema.validate(req.body);
+  // res.send(validation);
+  // const result = Joi.validate(ctx.request.body, schema);
+  const result = schema.validate(ctx.request.body);
+  console.log(result);
+
+  // res.send(result);
 
   // 스키마 검증 실패
   if (result.error) {
@@ -44,6 +56,8 @@ exports.localRegister = async (ctx) => {
     ctx.throw(500, e);
   }
 
+  console.log('account.profile', account.profile);
+
   ctx.body = account.profile; // 프로필 정보로 응답합니다.
 };
 
@@ -55,7 +69,8 @@ exports.localLogin = async (ctx) => {
     password: Joi.string().required(),
   });
 
-  const result = Joi.validate(ctx.request.body, schema);
+  // const result = Joi.validate(ctx.request.body, schema);
+  const result = schema.validate(ctx.request.body);
 
   if (result.error) {
     ctx.status = 400; // Bad Request
